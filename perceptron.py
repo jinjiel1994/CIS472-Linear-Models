@@ -34,11 +34,11 @@ def read_data(filename):
 
 # Learn weights using the perceptron algorithm
 def train_perceptron(data):
+
     # Initialize weight vector and bias
     numvars = len(data[0][0])
     w = [0.0] * numvars
     b = 0.0
-    # print(w)
 
     for i in range(100):
         converge = True
