@@ -39,9 +39,11 @@ def train_lr(data, eta, l2_reg_weight):
     numvars = len(data[0][0])
     w = [0.0] * numvars
     b = 0.0
+    los = [0.0] * len(data)
 
-    for i in range(10):
+    for i in range(100):
         converge = False
+        ind = 0
         for line in data:
             a = b
             for d in range(len(line[0])):
@@ -51,10 +53,14 @@ def train_lr(data, eta, l2_reg_weight):
                 y = 0
             else:
                 y = 1
-            b += eta * (y - prediction) * prediction * (1 - prediction) * 1.0
-            for d in range(len(line[0])):  # updating the coefficient
-                w[d] += eta * (y - prediction) * prediction * (1 - prediction) * line[0][d]
-
+            los[ind] = (prediction - y)
+            ind += 1
+        for m in range(len(data)):
+            b -= eta * los[m] * 1.0
+        for j in range(numvars):
+            w[j] -= l2_reg_weight/ len(data) * w[j]
+            for m in range(len(data)):
+                    w[j] -= eta * los[m] * data[m][0][j]
         if converge:
             break
 
